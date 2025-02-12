@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posture Analysis</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .video-container {
+            margin: 20px auto;
+            max-width: 800px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        #videoFeed {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        #feedback {
+            margin-top: 20px;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background-color: #4CAF50;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        #feedback.warning {
+            background-color: #ff9800;
+        }
+        #feedback.danger {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Real-Time Posture Analysis</h1>
+        <div class="video-container">
+            <img id="videoFeed" src="{{ url_for('video_feed') }}" alt="Posture Analysis Stream">
+        </div>
+        <div id="feedback">Analyzing posture...</div>
+    </div>
+
+    <script>
+        function updateFeedback() {
+            fetch('/feedback')
+                .then(response => response.json())
+                .then(data => {
+                    const feedbackDiv = document.getElementById('feedback');
+                    feedbackDiv.innerText = data.feedback;
+                    
+                    // Update feedback color based on content
+                    if (data.feedback.includes('High Risk')) {
+                        feedbackDiv.className = 'danger';
+                    } else if (data.feedback.includes('Medium Risk')) {
+                        feedbackDiv.className = 'warning';
+                    } else {
+                        feedbackDiv.className = '';
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Update feedback every second
+        setInterval(updateFeedback, 1000);
+    </script>
+</body>
+</html>
