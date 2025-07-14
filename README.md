@@ -1,4 +1,4 @@
-osture Analysis with Flask 🎥🧍‍♂️
+posture Analysis with Flask 🎥🧍‍♂️
 This project analyzes human posture in live video capture using OpenCV and integrates it with Flask for real-time streaming.
 
 Features 🚀
